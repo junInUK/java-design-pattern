@@ -6,6 +6,14 @@ import java.sql.*;
 import java.util.Properties;
 
 public class DBCon {
+
+    private static String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
+    private static String DB_URL = "jdbc:mysql://localhost:3306/todos_app?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+    private static final String USER = "root";
+    private static final String PASS = "123456uk";
+
+    //"jdbc:mysql://localhost:3306/test_demo?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC","root","password"
+
     private static DBCon instance = new DBCon();
 
     private DBCon(){
@@ -27,28 +35,15 @@ public class DBCon {
     public static ResultSet resultSet;
     public Statement stmt;
 
-    public Connection getConnection()
-            throws IOException,
-            InstantiationException,
-            IllegalAccessException,
-            ClassNotFoundException,
-            SQLException{
-        InputStream in = getClass().getClassLoader().getResourceAsStream("./sql.properties");
-        String jdbcDriver = null;
-        //
-        String jdbcUrl = null;
-        // db username
-        String USERNAME = null;
-        String PASSWORD = null;
-        Properties properties = new Properties();
-        properties.load(in);
-        jdbcDriver = properties.getProperty("DRIVER");
-        jdbcUrl = properties.getProperty("URL");
-        USERNAME = properties.getProperty("USERNAME");
-        PASSWORD = properties.getProperty("PASSWORD");
+    public Connection getConnection() throws SQLException,ClassNotFoundException {
 
-        Class.forName(jdbcDriver);
-        connection = DriverManager.getConnection(jdbcUrl, USERNAME, PASSWORD);
+        Class.forName(JDBC_DRIVER);
+        connection = DriverManager.getConnection(DB_URL, USER, PASS);
+        if(connection!=null){
+            System.out.println("Database connected!");
+        }else{
+            System.out.println("Database connection failed!");
+        }
         return connection;
     }
 
